@@ -1,0 +1,44 @@
+rules:
+  - id: mitre.powershell
+    technique: T1059.001
+    severity: 20
+    evidence: "PowerShell execution"
+    if:
+      image_endswith: ["\\powershell.exe", "\\pwsh.exe"]
+
+  - id: mitre.powershell_encoded
+    technique: T1027
+    severity: 30
+    evidence: "Encoded/obfuscated PowerShell"
+    if:
+      image_endswith: ["\\powershell.exe", "\\pwsh.exe"]
+      cmd_contains: ["-enc", "frombase64string", "iex", "bypass", "hidden", "nop"]
+
+  - id: mitre.mshta
+    technique: T1218.005
+    severity: 25
+    evidence: "mshta living-off-the-land"
+    if:
+      image_endswith: ["\\mshta.exe"]
+
+  - id: mitre.rundll32
+    technique: T1218.011
+    severity: 20
+    evidence: "rundll32 living-off-the-land"
+    if:
+      image_endswith: ["\\rundll32.exe"]
+
+  - id: mitre.regsvr32
+    technique: T1218.010
+    severity: 20
+    evidence: "regsvr32 living-off-the-land"
+    if:
+      image_endswith: ["\\regsvr32.exe"]
+
+  - id: mitre.office_spawn_script
+    technique: T1204
+    severity: 25
+    evidence: "Office spawning script engine"
+    if:
+      parent_image_endswith: ["\\winword.exe", "\\excel.exe", "\\powerpnt.exe"]
+      image_endswith: ["\\powershell.exe", "\\wscript.exe", "\\cscript.exe", "\\mshta.exe"]
